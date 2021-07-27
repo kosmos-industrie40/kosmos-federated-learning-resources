@@ -1,5 +1,4 @@
 stages:
-  - Statis Analysis
   - test
   - pre-release
   - release
@@ -18,47 +17,6 @@ include:
     file: '/pipeline-templates/.push-python-package-gitlab.yml'
     ref: master
 
-# ------ Static Analysis ------
-
-pylint_code:
-  image: python:3.8
-  stage: Static Analysis
-  before_script:
-    - python --version
-    - pip install -r requirements.txt
-    - pip install pylint
-  tags:
-    - shared
-  script:
-    - pylint src/*
-
-pylint_test:
-  image: python:3.8
-  stage: Static Analysis
-  before_script:
-    - python --version
-    - pip install -r requirements.txt
-    - pip install -r tests/test_requirements.txt
-    - pip install pylint
-  tags:
-    - shared
-  script:
-    - pylint --rcfile tests/.pylintrc tests
-    - pylint *.py
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
-      allow_failure: true
-
-black:
-  image: python:3.8
-  stage: Static Analysis
-  before_script:
-    - pip install -r requirements.txt
-    - pip install black
-  tags:
-    - shared
-  script:
-    - black --check .
 
 # ------ Test ------
 

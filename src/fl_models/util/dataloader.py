@@ -9,9 +9,8 @@ import logging
 
 from fl_models.DataSetType import DataSetType
 from fl_models.util.helper_methods import concat_dfs
-from fl_models.util.constants import (
-    SPECTRA_CSV_NAME,
-)
+from fl_models.util.constants import SPECTRA_CSV_NAME
+
 
 def get_bearing_processed_data_path():
     url = "http://s3-de-central.profitbricks.com/bearing_data/processed_data.zip"
@@ -27,8 +26,7 @@ def get_bearing_processed_data_path():
 
 
 def read_feature_dfs_as_dict(
-    bearing_names: List[str],
-    data_set_type: DataSetType = DataSetType.spectra,
+    bearing_names: List[str], data_set_type: DataSetType = DataSetType.spectra,
 ) -> Dict[str, pd.DataFrame]:
     """
     Reads all CSVs and compiles them into a data frame of a given sub set and CSV type

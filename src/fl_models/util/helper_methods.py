@@ -1,6 +1,7 @@
 import pandas as pd
 from typing import Dict
 
+
 def pop_labels(df_dict: Dict[str, pd.DataFrame]) -> Dict[str, pd.Series]:
     return {bearing: df.pop("RUL") for bearing, df in df_dict.items()}
 

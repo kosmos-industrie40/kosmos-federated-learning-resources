@@ -44,11 +44,7 @@ def fit_cnn(
         training_history = cnn_model.fit(x=x, y=y, epochs=epochs, verbose=2)
     else:
         training_history = cnn_model.fit(
-            x=x,
-            y=y,
-            epochs=epochs,
-            verbose=2,
-            validation_data=validation_data,
+            x=x, y=y, epochs=epochs, verbose=2, validation_data=validation_data,
         )
     return cnn_model, training_history
 

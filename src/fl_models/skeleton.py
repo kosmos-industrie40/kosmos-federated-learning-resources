@@ -19,7 +19,6 @@ import argparse
 import logging
 import sys
 
-from fl_models import __version__
 
 __author__ = "Carlos Garcia"
 __copyright__ = "inovex GmbH"
