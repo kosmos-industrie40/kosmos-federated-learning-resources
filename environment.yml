@@ -12,3 +12,4 @@ dependencies:
       - scikit-learn
       - tensorflow
       - tqdm
+      - wget
