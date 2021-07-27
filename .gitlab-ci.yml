@@ -4,19 +4,6 @@ stages:
   - release
   - package
 
-# ----- Include templates from idcp-provisioning -----
-
-include:
-  # Run pytest using miniconda
-  - project: 'inovex-kubeyard/idcp-provisioning'
-    file: '/pipeline-templates/pyscaffold/.pyscaffold-pytest-miniconda.yml'
-    ref: master
-
-  # Create & push PyPI package to Gitlab using twine
-  - project: 'inovex-kubeyard/idcp-provisioning'
-    file: '/pipeline-templates/.push-python-package-gitlab.yml'
-    ref: master
-
 
 # ------ Test ------
 
@@ -29,7 +16,7 @@ pytest-coverage-tests:
     - conda init bash
     - source ~/.bashrc
     # Create a test environment based on an environment.yml file (default)
-    - conda env create --name test-env -f ${ENVIRONMENT_FILE:-environment.yml}
+    - conda create --name test-env -f ${ENVIRONMENT_FILE:-environment.yml}
     - conda activate test-env
     - python setup.py install
   script:
