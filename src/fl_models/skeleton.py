@@ -22,7 +22,7 @@ import sys
 from fl_models import __version__
 
 __author__ = "Carlos Garcia"
-__copyright__ = "Carlos Garcia"
+__copyright__ = "inovex GmbH"
 __license__ = "MIT"
 
 _logger = logging.getLogger(__name__)

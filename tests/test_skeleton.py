@@ -3,7 +3,7 @@ import pytest
 from fl_models.skeleton import fib, main
 
 __author__ = "Carlos Garcia"
-__copyright__ = "Carlos Garcia"
+__copyright__ = "inovex GmbH"
 __license__ = "MIT"
 
 

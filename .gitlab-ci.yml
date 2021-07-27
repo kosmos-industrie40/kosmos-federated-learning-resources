@@ -1,11 +1,27 @@
 stages:
-  - Static Analysis
-  - Unit Test
-  - Build
+  - Statis Analysis
+  - test
+  - pre-release
+  - release
+  - package
 
-image: "python:3.8.0"
+# ----- Include templates from idcp-provisioning -----
+
+include:
+  # Run pytest using miniconda
+  - project: 'inovex-kubeyard/idcp-provisioning'
+    file: '/pipeline-templates/pyscaffold/.pyscaffold-pytest-miniconda.yml'
+    ref: master
+
+  # Create & push PyPI package to Gitlab using twine
+  - project: 'inovex-kubeyard/idcp-provisioning'
+    file: '/pipeline-templates/.push-python-package-gitlab.yml'
+    ref: master
+
+# ------ Static Analysis ------
 
 pylint_code:
+  image: python:3.8
   stage: Static Analysis
   before_script:
     - python --version
@@ -17,6 +33,7 @@ pylint_code:
     - pylint src/*
 
 pylint_test:
+  image: python:3.8
   stage: Static Analysis
   before_script:
     - python --version
@@ -33,6 +50,7 @@ pylint_test:
       allow_failure: true
 
 black:
+  image: python:3.8
   stage: Static Analysis
   before_script:
     - pip install -r requirements.txt
@@ -42,26 +60,83 @@ black:
   script:
     - black --check .
 
-# test:
-#   stage: Unit Test
-#   before_script:
-#     - python --version
-#     - pip install -r requirements.txt
-#     - pip install -r tests/test_requirements.txt
-#     - python setup.py develop
-#   tags:
-#     - shared
-#   script:
-#     - python -m unittest discover
+# ------ Test ------
 
-build:
-  stage: Build
-  before_script:
-    - pip install -r requirements.txt
-    - pip install wheel
-    #- python setup.py install
-    # path erweitern falls kflf nicht erkannt wird
+pyscaffold-unit-tests:
+  extends: .pyscaffold-pytest-miniconda
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+
+
+# ------ Release -------
+
+prepare-release:
+  image: python:3.8
+  stage: pre-release
   tags:
     - shared
+  rules:
+    # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
+      when: never
+    # Run this job when commits are pushed or merged to the default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    - apt-get update && apt-get install curl git
+    - python -m pip install -U setuptools_scm
+    - git fetch --all --tags -f
   script:
-    - python setup.py sdist bdist_wheel
+    # Get PyScaffold dev tag name
+    - DEV_TAG_NAME=$(python setup.py --version)
+    - echo "${DEV_TAG_NAME}"
+    - VERSION_NUMBER=${DEV_TAG_NAME:0:3}
+    # Extract the tag counter number from the CI variables
+    - TAG_NUMBER=$((TAG_NUMBER+1))
+    # Create tag name by combining semseg version number & TAG_COUNTER variable
+    - TAG_NAME="${VERSION_NUMBER}.post${TAG_NUMBER}"
+    # Generate the TAG environment variables and append to the variables.env file
+    - echo "TAG=${TAG_NAME}" >> variables.env
+    - cat variables.env
+    # Update Gitlab variable TAG_NUMBER via API call
+    - "curl --request PUT --header \"PRIVATE-TOKEN: ${API_ACCESS_TOKEN}\" \"https://gitlab.inovex.de/api/v4/projects/${CI_PROJECT_ID}/variables/TAG_NUMBER\" --form \"value=${TAG_NUMBER}\""
+  artifacts:
+    reports:
+      dotenv: variables.env
+
+create-release:
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: release
+  tags:
+    - shared
+  needs:
+    - job: prepare-release
+      artifacts: true
+  rules:
+    # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
+      when: never
+    # Run this job when commits are pushed or merged to the default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - echo 'Running create-release for $TAG'
+  release:
+    name: 'Release $TAG'
+    description: 'Created using the release-cli'
+    tag_name: '$TAG'
+    ref: '$CI_COMMIT_SHA'
+
+# ----- Create & push python package to Gitlab PyPI -----
+
+push-python-package:
+  extends: .push-python-package-gitlab
+  rules:
+    # Only run job if:
+    # - the commit is tagged
+    # - the two Gitlab CI variables are set
+    - if: $CI_COMMIT_TAG && $PACKAGE_REGISTRY_DEPLOY_TOKEN_PASSWORD && $PACKAGE_REGISTRY_DEPLOY_TOKEN_USERNAME
+      when: on_success
+  before_script:
+    - pip install -U twine
+    - pip install -U setuptools_scm
