@@ -1,0 +1,67 @@
+stages:
+  - Static Analysis
+  - Unit Test
+  - Build
+
+image: "python:3.8.0"
+
+pylint_code:
+  stage: Static Analysis
+  before_script:
+    - python --version
+    - pip install -r requirements.txt
+    - pip install pylint
+  tags:
+    - shared
+  script:
+    - pylint src/*
+
+pylint_test:
+  stage: Static Analysis
+  before_script:
+    - python --version
+    - pip install -r requirements.txt
+    - pip install -r tests/test_requirements.txt
+    - pip install pylint
+  tags:
+    - shared
+  script:
+    - pylint --rcfile tests/.pylintrc tests
+    - pylint *.py
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+      allow_failure: true
+
+black:
+  stage: Static Analysis
+  before_script:
+    - pip install -r requirements.txt
+    - pip install black
+  tags:
+    - shared
+  script:
+    - black --check .
+
+# test:
+#   stage: Unit Test
+#   before_script:
+#     - python --version
+#     - pip install -r requirements.txt
+#     - pip install -r tests/test_requirements.txt
+#     - python setup.py develop
+#   tags:
+#     - shared
+#   script:
+#     - python -m unittest discover
+
+build:
+  stage: Build
+  before_script:
+    - pip install -r requirements.txt
+    - pip install wheel
+    #- python setup.py install
+    # path erweitern falls kflf nicht erkannt wird
+  tags:
+    - shared
+  script:
+    - python setup.py sdist bdist_wheel
