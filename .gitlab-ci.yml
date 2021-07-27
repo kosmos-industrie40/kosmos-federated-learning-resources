@@ -4,6 +4,19 @@ stages:
   - release
   - package
 
+# ----- Include templates from idcp-provisioning -----
+
+include:
+  # Run pytest using miniconda
+  - project: 'inovex-kubeyard/idcp-provisioning'
+    file: '/pipeline-templates/pyscaffold/.pyscaffold-pytest-miniconda.yml'
+    ref: master
+
+  # Create & push PyPI package to Gitlab using twine
+  - project: 'inovex-kubeyard/idcp-provisioning'
+    file: '/pipeline-templates/.push-python-package-gitlab.yml'
+    ref: master
+
 
 # ------ Test ------
 
