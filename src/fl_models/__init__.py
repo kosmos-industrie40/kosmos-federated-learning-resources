@@ -9,3 +9,4 @@
 #    __version__ = "unknown"
 # finally:
 #    del get_distribution, DistributionNotFound
+__version__ = "0.0.1"
