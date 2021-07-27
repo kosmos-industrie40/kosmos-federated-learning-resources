@@ -20,13 +20,20 @@ include:
 
 # ------ Test ------
 
-pyscaffold-unit-tests:
-  extends: .pyscaffold-pytest-miniconda
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - when: on_success
-
+pytest-coverage-tests:
+  stage: test
+  tags:
+    - shared
+  image: continuumio/miniconda3:latest
+  before_script:
+    - conda init bash
+    - source ~/.bashrc
+    # Create a test environment based on an environment.yml file (default)
+    - conda env create --name test-env -f ${ENVIRONMENT_FILE:-environment.yml}
+    - conda activate test-env
+    - python setup.py install
+  script:
+    - python -m pytest --cov=tests/
 
 # ------ Release -------
 
