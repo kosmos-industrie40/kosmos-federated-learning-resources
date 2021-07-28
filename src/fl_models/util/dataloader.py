@@ -15,7 +15,7 @@ def get_bearing_processed_data_path():
     url = "http://s3-de-central.profitbricks.com/bearing_data/processed_bearing_data.zip"
     path = "/tmp/processed_bearing_data"
     if not os.path.exists(path):
-        logging.debug("Downloading bearing process data...")
+        print("Downloading bearing process data...")
         wget.download(url, '/tmp')
         with zipfile.ZipFile(f"{path}.zip", "r") as zip_ref:
             zip_ref.extractall('/tmp')
