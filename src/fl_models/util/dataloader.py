@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from typing import Dict, List
-from pathlib import Path
 from tqdm import tqdm
 import wget
 import zipfile
@@ -40,12 +39,12 @@ def read_feature_dfs_as_dict(
         name for name in bearing_names if os.path.isdir(os.path.join(path, name))
     ]
     bearing_list = sorted(bearing_list)
-    file_name: str = data_set_type.value
+    file_name: str = data_set_type if isinstance(data_set_type, str) else data_set_type.value
     df_dict = {}
     for bearing in tqdm(
         bearing_list, desc="Reading computed features of bearings from: %s" % file_name
     ):
-        df_dict[bearing] = pd.read_csv(Path.joinpath(path, bearing, file_name))
+        df_dict[bearing] = pd.read_csv(os.path.join(path, bearing, file_name))
     return df_dict
 
 
