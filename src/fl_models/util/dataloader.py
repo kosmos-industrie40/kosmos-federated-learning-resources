@@ -13,13 +13,13 @@ from fl_models.util.constants import SPECTRA_CSV_NAME
 
 
 def get_bearing_processed_data_path():
-    url = "http://s3-de-central.profitbricks.com/bearing_data/processed_data.zip"
+    url = "http://s3-de-central.profitbricks.com/bearing_data/processed_bearing_data.zip"
     path = "/tmp/processed_bearing_data"
     if not os.path.exists(path):
         logging.debug("Downloading bearing process data...")
-        wget.download(url, f"{path}.zip")
+        wget.download(url, '/tmp')
         with zipfile.ZipFile(f"{path}.zip", "r") as zip_ref:
-            zip_ref.extractall(path)
+            zip_ref.extractall('/tmp')
         os.remove(f"{path}.zip")
     logging.info("Bearing processed data found.")
     return path
