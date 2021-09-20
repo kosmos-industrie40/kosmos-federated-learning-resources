@@ -13,7 +13,7 @@ from fl_models.util.constants import SPECTRA_CSV_NAME
 
 def get_bearing_processed_data_path():
     #url = "http://s3-de-central.profitbricks.com/bearing_data/processed_bearing_data.zip"#new data
-    url = "https://nextcloud.inovex.de/s/36EYw7zjnYo95sk/download/processed_data.zip"#old data
+    url = "https://nextcloud.inovex.de/s/ELBkDJ6Y4ZwsKat/download/processed_data.zip"#old data
     path = "/tmp/processed_bearing_data"
     if not os.path.exists(path):
         print("Downloading bearing process data...")
