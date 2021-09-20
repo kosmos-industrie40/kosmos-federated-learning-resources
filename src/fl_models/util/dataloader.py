@@ -20,6 +20,8 @@ def get_bearing_processed_data_path():
         with zipfile.ZipFile(f"{path}.zip", "r") as zip_ref:
             zip_ref.extractall('/tmp')
         os.remove(f"{path}.zip")
+    else:
+        print("Bearing process data is omitted because it already exists...")
     logging.info("Bearing processed data found.")
     return path
 
