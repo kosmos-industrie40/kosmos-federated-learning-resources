@@ -16,7 +16,7 @@ def get_bearing_processed_data_path():
     url = "https://nextcloud.inovex.de/index.php/s/66Lx5Y4TtnJ4CW8/download/processed_bearing_data.zip"
     path = "/tmp/processed_bearing_data"
     if not os.path.exists(path):
-        print("Downloading bearing processed data. This could take a while.")
+        print("Downloading bearing processed data. This could take a while ...")
         wget.download(url, '/tmp')
         with zipfile.ZipFile(f"{path}.zip", "r") as zip_ref:
             zip_ref.extractall('/tmp')
