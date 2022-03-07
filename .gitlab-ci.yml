@@ -54,14 +54,10 @@ prepare-release:
     - python -m pip install -U setuptools_scm
     - git fetch --all --tags -f
   script:
-    # Get PyScaffold dev tag name
-    - DEV_TAG_NAME=$(python setup.py --version)
-    - echo "${DEV_TAG_NAME}"
-    - VERSION_NUMBER=${DEV_TAG_NAME:0:3}
     # Extract the tag counter number from the CI variables
     - TAG_NUMBER=$((TAG_NUMBER+1))
     # Create tag name by combining semseg version number & TAG_COUNTER variable
-    - TAG_NAME="${VERSION_NUMBER}.post${TAG_NUMBER}"
+    - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
     # Generate the TAG environment variables and append to the variables.env file
     - echo "TAG=${TAG_NAME}" >> variables.env
     - cat variables.env
