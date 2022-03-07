@@ -14,13 +14,21 @@ from fl_models.util.constants import SPECTRA_CSV_NAME
 def get_bearing_processed_data_path():
     print("Preparing data ...")
     url = "https://nextcloud.inovex.de/index.php/s/66Lx5Y4TtnJ4CW8/download/processed_bearing_data.zip"
-    path = "/tmp/processed_bearing_data"
+    tmp_folder_path = '/tmp'
+    data_file_name = 'processed_bearing_data'
+    data_file_extension = 'zip'
+
+    # Check if temp folder exists, if not create
+    if not os.path.exists(tmp_folder_path) or not os.path.isdir(tmp_folder_path):
+        os.mkdir(tmp_folder_path)
+
+    path = os.path.join(tmp_folder_path, f"{data_file_name}")
     if not os.path.exists(path):
         print("Downloading bearing processed data. This could take a while ...")
-        wget.download(url, '/tmp')
-        with zipfile.ZipFile(f"{path}.zip", "r") as zip_ref:
-            zip_ref.extractall('/tmp')
-        os.remove(f"{path}.zip")
+        wget.download(url, tmp_folder_path)
+        with zipfile.ZipFile(f"{path}.{data_file_extension}", "r") as zip_ref:
+            zip_ref.extractall(tmp_folder_path)
+        os.remove(f"{path}.{data_file_extension}")
 
     logging.info("Bearing processed data found.")
     return path
