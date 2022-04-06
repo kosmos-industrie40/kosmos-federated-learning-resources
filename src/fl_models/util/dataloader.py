@@ -13,7 +13,7 @@ from fl_models.util.constants import SPECTRA_CSV_NAME
 
 def get_bearing_processed_data_path():
     print("Preparing data ...")
-    url = "https://nextcloud.inovex.de/index.php/s/66Lx5Y4TtnJ4CW8/download/processed_bearing_data.zip"
+    url = "https://nextcloud.inovex.de/index.php/s/rAoGRdnqHHHe82i/download/processed_bearing_data.zip"
     tmp_folder_path = '/tmp'
     data_file_name = 'processed_bearing_data'
     data_file_extension = 'zip'
