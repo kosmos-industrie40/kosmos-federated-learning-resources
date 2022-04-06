@@ -37,7 +37,7 @@ pytest-coverage-tests:
     # Create tag name by combining semseg version number & TAG_COUNTER variable
     - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
     #- git tag -f ${TAG_NAME} - No Tags for OpenSourcing
-    - python setup.py install
+    - pip install -r requirements.txt
   script:
     - python -m pytest --cov=tests/
 
