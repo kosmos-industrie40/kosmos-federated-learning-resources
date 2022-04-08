@@ -3,6 +3,7 @@ stages:
   - pre-release
   - release
   - package
+  - tag
 
 # ----- Include templates from idcp-provisioning -----
 
@@ -109,3 +110,12 @@ push-python-package:
     - apt-get update && apt-get install -y git
     - pip install -U twine
     - pip install -U setuptools_scm
+
+removed-tag:
+  image: python:3.8
+  stage: tag
+  if: $CI_COMMIT_TAG
+  when: on_success
+  tags:
+    - shared
+  script: git tag -d $TAG
