@@ -116,9 +116,8 @@ removed-tag:
   stage: tag
   rules:
     - if: $CI_COMMIT_TAG
-      when: on_success
+      when: always
   tags:
     - shared
   script: 
-    - apt-get update && apt-get install git
-    - git tag -d $TAG
+    - git push --delete origin $TAG
