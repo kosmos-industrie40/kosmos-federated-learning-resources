@@ -122,5 +122,5 @@ removed-tag:
   script: 
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - git config --global url."https://$GIT_USER:$GIT_TOKEN@gitlab.inovex.de".insteadOf https://gitlab.inovex.de
+    - git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@gitlab.inovex.de/${CI_PROJECT_PATH}.git
     - git push --delete origin $CI_COMMIT_TAG
