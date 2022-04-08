@@ -8,15 +8,14 @@ stages:
 
 include:
   # Run pytest using miniconda
-  - project: 'inovex-kubeyard/idcp-provisioning'
-    file: '/pipeline-templates/pyscaffold/.pyscaffold-pytest-miniconda.yml'
+  - project: "inovex-kubeyard/idcp-provisioning"
+    file: "/pipeline-templates/pyscaffold/.pyscaffold-pytest-miniconda.yml"
     ref: master
 
   # Create & push PyPI package to Gitlab using twine
-  - project: 'inovex-kubeyard/idcp-provisioning'
-    file: '/pipeline-templates/.push-python-package-gitlab.yml'
+  - project: "inovex-kubeyard/idcp-provisioning"
+    file: "/pipeline-templates/.push-python-package-gitlab.yml"
     ref: master
-
 
 # ------ Test ------
 
@@ -38,9 +37,10 @@ pytest-coverage-tests:
     - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
     #- git tag -f ${TAG_NAME} - No Tags for OpenSourcing
     - pip install -r requirements.txt
+    - git tag | xargs git tag -d
+    - pip install -e .
   script:
     - python -m pytest --cov=tests/
-
 
 # ------ Release -------
 
@@ -68,7 +68,7 @@ prepare-release:
     - echo "TAG=${TAG_NAME}" >> variables.env
     - cat variables.env
     # Update Gitlab variable TAG_NUMBER via API call
-    - "curl --request PUT --header \"PRIVATE-TOKEN: ${API_ACCESS_TOKEN}\" \"https://gitlab.inovex.de/api/v4/projects/${CI_PROJECT_ID}/variables/TAG_NUMBER\" --form \"value=${TAG_NUMBER}\""
+    - 'curl --request PUT --header "PRIVATE-TOKEN: ${API_ACCESS_TOKEN}" "https://gitlab.inovex.de/api/v4/projects/${CI_PROJECT_ID}/variables/TAG_NUMBER" --form "value=${TAG_NUMBER}"'
   artifacts:
     reports:
       dotenv: variables.env
@@ -90,10 +90,10 @@ create-release:
   script:
     - echo 'Running create-release for $TAG'
   release:
-    name: 'Release $TAG'
-    description: 'Created using the release-cli'
-    tag_name: '$TAG'
-    ref: '$CI_COMMIT_SHA'
+    name: "Release $TAG"
+    description: "Created using the release-cli"
+    tag_name: "$TAG"
+    ref: "$CI_COMMIT_SHA"
 
 # ----- Create & push python package to Gitlab PyPI -----
 
