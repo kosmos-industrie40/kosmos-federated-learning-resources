@@ -1,0 +1,15 @@
+name: fl-models
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+      - pyscaffold
+      - pytest
+      - pytest-cov
+      - pandas
+      - scikit-learn
+      - tensorflow
+      - tqdm
+      - wget
