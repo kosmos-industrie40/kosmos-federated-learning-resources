@@ -36,7 +36,10 @@ pytest-coverage-tests:
     - TAG_NUMBER=$((TAG_NUMBER+1))
     # Create tag name by combining semseg version number & TAG_COUNTER variable
     - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
-    #- git tag -f ${TAG_NAME} - No Tags for OpenSourcing
+    - |
+      if [ $CI_COMMIT_BRANCH == "release" ]; then
+        git tag -f ${TAG_NAME}
+      fi
     - pip install -r requirements.txt
     - git tag | xargs git tag -d
     - pip install -e .
@@ -54,8 +57,8 @@ prepare-release:
     # Do not run this job when a tag is created manually
     - if: $CI_COMMIT_TAG
       when: never
-    # Run this job when commits are pushed or merged to the default branch
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Run this job when commits are pushed or merged to the release branch
+    - if: $CI_COMMIT_BRANCH == "release"
   before_script:
     - apt-get update && apt-get install curl git
     - python -m pip install -U setuptools_scm
@@ -110,17 +113,3 @@ push-python-package:
     - apt-get update && apt-get install -y git
     - pip install -U twine
     - pip install -U setuptools_scm
-
-removed-tag:
-  image: python:3.8
-  stage: tag
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: always
-  tags:
-    - shared
-  script: 
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - git remote set-url origin https://${GIT_USER}:${API_ACCESS_TOKEN}@gitlab.inovex.de/${CI_PROJECT_PATH}.git
-    - git push --delete origin $CI_COMMIT_TAG
