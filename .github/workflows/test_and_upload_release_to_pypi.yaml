@@ -15,8 +15,8 @@ jobs:
           python-version: "3.8"
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Install dependencies
-        run: python setup.py install
+      - name: Install dependencies of itself
+        run: pip install -e .
       - name: Run unit tests
         run: python -m pytest --cov=tests/
 
