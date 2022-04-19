@@ -8,3 +8,4 @@ tqdm==4.56.0
 wget==3.2
 pytest
 pytest-cov
+pyscaffold
