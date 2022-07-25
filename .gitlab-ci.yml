@@ -1,4 +1,5 @@
 stages:
+  - lint
   - test
   - pre-release
   - release
@@ -18,33 +19,59 @@ include:
     file: "/pipeline-templates/.push-python-package-gitlab.yml"
     ref: master
 
-# ------ Test ------
-
-pytest-coverage-tests:
-  stage: test
+# ------ Lint ------
+pylint_code:
+  stage: lint
+  image: "python:3.8"
   tags:
     - shared
-  image: continuumio/miniconda3:latest
   before_script:
-    - conda init bash
-    - source ~/.bashrc
-    # Create a test environment based on an environment.yml file (default)
-    - conda env create --name test-env -f ${ENVIRONMENT_FILE:-environment.yml}
-    - conda activate test-env
-    - apt-get update && apt-get install git
-    # Extract the tag counter number from the CI variables
-    - TAG_NUMBER=$((TAG_NUMBER+1))
-    # Create tag name by combining semseg version number & TAG_COUNTER variable
-    - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
-    - |
-      if [ $CI_COMMIT_BRANCH == "release" ]; then
-        git tag -f ${TAG_NAME}
-      fi
-    - pip install -r requirements.txt
-    - git tag | xargs git tag -d
-    - pip install -e .
+    - pip install -r ./requirements.txt
+    - pip install .
+    - pip install pylint==2.11.1
+    - pip install typing-extensions~=3.10
   script:
-    - python -m pytest --cov=tests/
+    - pylint src/fl_models/*
+
+black:
+  stage: lint
+  image: "python:3.8"
+  tags:
+    - shared
+  before_script:
+    - pip install black
+    - black --check src/
+  script:
+    - black --check tests/
+
+
+# ------ Test ------
+
+# pytest-coverage-tests:
+#   stage: test
+#   tags:
+#     - shared
+#   image: continuumio/miniconda3:latest
+#   before_script:
+#     - conda init bash
+#     - source ~/.bashrc
+#     # Create a test environment based on an environment.yml file (default)
+#     - conda env create --name test-env -f ${ENVIRONMENT_FILE:-environment.yml}
+#     - conda activate test-env
+#     - apt-get update && apt-get install git
+#     # Extract the tag counter number from the CI variables
+#     - TAG_NUMBER=$((TAG_NUMBER+1))
+#     # Create tag name by combining semseg version number & TAG_COUNTER variable
+#     - TAG_NAME="${DEV_TAG_NAME}.post${TAG_NUMBER}"
+#     - |
+#       if [ $CI_COMMIT_BRANCH == "release" ]; then
+#         git tag -f ${TAG_NAME}
+#       fi
+#     - pip install -r requirements.txt
+#     - git tag | xargs git tag -d
+#     - pip install -e .
+#   script:
+#     - python -m pytest --cov=tests/
 
 # ------ Release -------
 

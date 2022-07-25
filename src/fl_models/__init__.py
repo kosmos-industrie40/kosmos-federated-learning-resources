@@ -1,3 +1,6 @@
+"""
+Module imports
+"""
 # -*- coding: utf-8 -*-
 # from pkg_resources import DistributionNotFound, get_distribution
 #
@@ -10,3 +13,9 @@
 # finally:
 #    del get_distribution, DistributionNotFound
 __version__ = "0.0.1"
+
+from . import util
+from . import abstract
+from . import cnn_model
+from . import data_set_type
+from . import ffnn
