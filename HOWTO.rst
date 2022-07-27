@@ -427,8 +427,8 @@ As a last step the configuration files have to be updated so our usecase gets tr
 Updating the Configuration Files
 ----------------------------
 
-There are two configuration files that have to be updated. One on the client side at `fl_client/src/fl_client/config.yaml <https://gitlab.inovex.de/proj-kosmos/analytics/federated-learning/fl_client/-/blob/master/src/fl_client/config.yaml>`_
-and one on the server side at `fl_server/src/fl_server/config.yaml <https://gitlab.inovex.de/proj-kosmos/analytics/federated-learning/fl_server/-/blob/master/src/fl_server/config.yaml>`_.
+There are two configuration files that have to be updated. One on the client side at `fl_client/src/fl_client/config.yaml <https://github.com/kosmos-industrie40/kosmos-federated-learning-client/blob/release/src/fl_client/config.yaml>`_
+and one on the server side at `fl_server/src/fl_server/config.yaml <https://github.com/kosmos-industrie40/kosmos-federated-learning-server/blob/release/src/fl_server/config.yaml>`_.
 
 In the server configuration file the :code:`usecase` section has to be updated:
 
