@@ -2,10 +2,12 @@ pip == 21.1
 setuptools == 54.2.0
 pandas==1.1.5
 scikit-learn==0.24.1
-numpy
 tensorflow==2.4.2
 tqdm==4.56.0
 wget==3.2
+mlflow==1.24.0
+flwr==0.16.0
 pytest
 pytest-cov
 pyscaffold
+numpy
