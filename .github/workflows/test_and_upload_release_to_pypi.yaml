@@ -2,23 +2,6 @@ name: Upload Python Package to PyPi
 on: push
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - name: Install requirements
-        run: pip install -r requirements.txt
-      - name: Install dependencies of itself
-        run: pip install -e .
-      - name: Run unit tests
-        run: python -m pytest --cov=tests/
 
   publish:
     if: github.event_name == 'push'
