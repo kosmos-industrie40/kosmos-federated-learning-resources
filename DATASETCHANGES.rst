@@ -1,8 +1,9 @@
-=======
-DATASET
-=======
+===============
+BEARING DATASET
+===============
 
-The utilized dataset is a modified version of the FEMTO-ST Bearings Dataset [NECT2012]_. This file contains further information on the modifications applied.
+The dataset utilized in the bearing usecase is a modified version of the FEMTO-ST Bearings Dataset [NECT2012]_. This file contains further information on the modifications applied.
+The dataset is downloaded from `here <https://nextcloud.inovex.de/index.php/s/rAoGRdnqHHHe82i/download/processed_bearing_data.zip>`_.
 
 Changes
 =======

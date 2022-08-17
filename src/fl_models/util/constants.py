@@ -1,3 +1,7 @@
+"""
+Module containing project constants
+"""
+
 SPECTRA_SHAPE = (129, 21, 2)
 
 # File names
@@ -6,6 +10,8 @@ SPECTRA_CSV_NAME = "spectra.csv.gz"
 RAW_CSV_NAME = "acc.csv"
 
 # Metric keys
+MSE_KEY = "MSE"
+R2_SCORE_KEY = "R2"
 RMSE_KEY = "RMSE"
 CORR_COEFF_KEY = "PCC"
 STANDARD_DEVIATION_KEY = "STD"
