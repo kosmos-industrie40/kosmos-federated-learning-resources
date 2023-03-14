@@ -50,7 +50,7 @@ class BearingDataset(AbstractDataset):
         :rtype: str
         """
         print("Preparing data ...")
-        url = "https://nextcloud.inovex.de/index.php/s/rAoGRdnqHHHe82i/download/processed_bearing_\
+        url = "https://artifactory.inovex.de/artifactory/KOSMos-public/processed_bearing_\
             data.zip"
         tmp_folder_path = "/tmp"
         data_file_name = "processed_bearing_data"
